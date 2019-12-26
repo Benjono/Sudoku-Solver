@@ -1,4 +1,6 @@
 import math
+
+#Uses 3.7.4 python
 #returns true if solution can be found, false otherwise
 #takes a two dimensional list as an input called board
 def solver(solveBoard):
@@ -6,24 +8,25 @@ def solver(solveBoard):
     squareSize = math.floor(math.sqrt(boardSize)) #gets size of a 'cell', or the sqrt of the size of the board
 
     find = findEmpty(solveBoard, boardSize) #find the next empty cell
-    if find: #if there is one
+    if find: #if an empty cell is found
         row, col = find
-    else: #if there isn't
-        return True #base case 1, no spaces left empty
-    #doesn't say whether or not a solution is valid.
+    else: #if no empty cell is found (puzzle is solved)
+        return True #base case 1, success
+    #if a completed grid is submitted the program will return True, regardless of if the program is valid
 
-    for i in range(1,boardSize+1): #for each possible number
-        if valid(solveBoard, (row, col),i,squareSize, boardSize): #if it's valid in the grid
+    for i in range(1,boardSize+1): #for each number that could be in a cell
+        if valid(solveBoard, (row, col),i,squareSize, boardSize): #attempt to see if it'd be valid if inserted
+            #if it would
             solveBoard[row][col]=i #insert the number
 
-            if solver(solveBoard): #go to next number with updated board
-                return True #if base case one is hit, return true.
+            if solver(solveBoard): #try the 
+                return True #if the success base case is hit, push it up the recursive stack
 
             solveBoard[row][col]=0 #otherwise remove the number
     return False; #if no number provides a valid solution, backtrack
 
 #returns the pair (countX, countY) if a empty space can be found
-#otherwise returns 0
+#otherwise returns None
 def findEmpty(findBoard, boardSize):
     for i in range(boardSize):
         for j in range(boardSize):
@@ -79,3 +82,7 @@ board2 = [[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
 solver(board2)
 for i in board2:
     print(i)
+#Improvements
+    #Able to submit your own grid
+    #Make a GUI
+    #Textually show the program running
