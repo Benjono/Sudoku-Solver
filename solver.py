@@ -1,32 +1,44 @@
 import math
 
-#Uses 3.7.4 python
-#returns true if solution can be found, false otherwise
-#takes a two dimensional list as an input called board
+# Uses 3.7.4 python
+# returns true if solution can be found, false otherwise
+# takes a two dimensional list as an input called board
+# Uses a depth first search
 def solver(solveBoard):
-    boardSize = len(solveBoard) #gets size of board
-    squareSize = math.floor(math.sqrt(boardSize)) #gets size of a 'cell', or the sqrt of the size of the board
+    # gets size of board
+    boardSize = len(solveBoard) 
+    # gets size of a 'cell', or the sqrt of the size of the board
+    squareSize = math.floor(math.sqrt(boardSize)) 
 
-    find = findEmpty(solveBoard, boardSize) #find the next empty cell
-    if find: #if an empty cell is found
+    # find the next empty cell
+    find = findEmpty(solveBoard, boardSize) 
+    # if an empty cell is found
+    if find: 
         row, col = find
-    else: #if no empty cell is found (puzzle is solved)
-        return True #base case 1, success
-    #if a completed grid is submitted the program will return True, regardless of if the program is valid
-
-    for i in range(1,boardSize+1): #for each number that could be in a cell
-        if valid(solveBoard, (row, col),i,squareSize, boardSize): #attempt to see if it'd be valid if inserted
-            #if it would
-            solveBoard[row][col]=i #insert the number
-
+    # if no empty cell is found (puzzle is solved)
+    else: 
+        # base case 1, success   
+        return True 
+    # if a completed grid is submitted the program will return True,
+    # regardless of if the program is valid
+    
+    # for each number that could be in a cell
+    for i in range(1,boardSize+1): 
+        # attempt to see if it'd be valid if inserted and if it would be
+        if valid(solveBoard, (row, col),i,squareSize, boardSize): 
+            # insert the number
+            solveBoard[row][col]=i 
             if solver(solveBoard): #try the 
-                return True #if the success base case is hit, push it up the recursive stack
+                # if the success base case is hit, 
+                # push it up the recursive stack
+                return True 
+            # otherwise remove the number
+            solveBoard[row][col]=0 
+    # if no number provides a valid solution, backtrack
+    return False; 
 
-            solveBoard[row][col]=0 #otherwise remove the number
-    return False; #if no number provides a valid solution, backtrack
-
-#returns the pair (countX, countY) if a empty space can be found
-#otherwise returns None
+# returns the pair (countX, countY) if a empty space can be found
+# otherwise returns None
 def findEmpty(findBoard, boardSize):
     for i in range(boardSize):
         for j in range(boardSize):
@@ -34,9 +46,9 @@ def findEmpty(findBoard, boardSize):
                 return (i,j)
     return None
 
-#decides whether or not a number placement is valid.
+# decides whether or not a number placement is valid.
 def valid(validBoard, pos, num, squareSize, boardSize):
-    #check the column and row
+    # check the column and row
     for i in range(0, boardSize):
         if validBoard[pos[0]][i] == num and pos[1] != i:
             return False;
@@ -45,7 +57,8 @@ def valid(validBoard, pos, num, squareSize, boardSize):
         
     x = (pos[1]//squareSize)*squareSize
     y = (pos[0]//squareSize)*squareSize
-    # modulus by the sqrt of the size of the board to get a number between 0 and squareSize-1
+    # modulus by the sqrt of the size of the board to get a
+    # number between 0 and squareSize-1
     # multiply by 3 to get 0, 3 or 6. Giving the squares starting positions
     for i in range(y,y+squareSize):
         for j in range(x,x+squareSize): #check the cell
